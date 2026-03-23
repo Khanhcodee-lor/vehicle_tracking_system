@@ -29,7 +29,7 @@ class FirebaseRealtimeDatabaseService {
     await _db.ref(path).set(data);
   }
 
-  /// Cập nhật một phần dữ liệu tại đường dẫn (Update) - Thường dùng Map<String, dynamic>
+  /// Cập nhật một phần dữ liệu tại đường dẫn (Update) - Thuong dung `Map<String, dynamic>`
   Future<void> updateData(String path, Map<String, dynamic> data) async {
     await _db.ref(path).update(data);
   }
