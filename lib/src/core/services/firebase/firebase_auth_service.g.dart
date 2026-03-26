@@ -55,4 +55,4 @@ final class FirebaseAuthServiceProvider
 }
 
 String _$firebaseAuthServiceHash() =>
-    r'932f2366f20e06e26bf8aba16cd27209742e9bb9';
+    r'5b8afeb2ee48dd318a224972ba814148af29a18c';

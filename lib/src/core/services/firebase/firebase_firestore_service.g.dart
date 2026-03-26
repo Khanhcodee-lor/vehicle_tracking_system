@@ -55,4 +55,4 @@ final class FirebaseFirestoreServiceProvider
 }
 
 String _$firebaseFirestoreServiceHash() =>
-    r'600a6d1bf8ab4bc962f0bde55c2de8bef8c40e17';
+    r'7cc14bb34dc2d5adaefdb18f1ff05b1445c766dd';

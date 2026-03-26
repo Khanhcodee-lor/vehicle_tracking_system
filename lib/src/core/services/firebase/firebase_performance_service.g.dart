@@ -56,4 +56,4 @@ final class FirebasePerformanceServiceProvider
 }
 
 String _$firebasePerformanceServiceHash() =>
-    r'08f62898aee568a6fc5fa7739e0272837dc3d03c';
+    r'3e32d77723a5bf39e66c586c4446beeba126ce36';

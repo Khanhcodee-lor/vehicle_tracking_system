@@ -55,4 +55,4 @@ final class FirebaseStorageServiceProvider
 }
 
 String _$firebaseStorageServiceHash() =>
-    r'441add092abe957a7657be3a4b4a3d9ce04e199e';
+    r'44250ccd963835ef361a218487235124c7e68d7c';

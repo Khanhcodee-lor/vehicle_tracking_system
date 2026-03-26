@@ -58,4 +58,4 @@ final class FirebaseRealtimeDatabaseServiceProvider
 }
 
 String _$firebaseRealtimeDatabaseServiceHash() =>
-    r'20d612ec399d307e64eb5a5a57f477524c07324a';
+    r'bdd1221ba01f0ea73c5402182917273fdffe21d4';

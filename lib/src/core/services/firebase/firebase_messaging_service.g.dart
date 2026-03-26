@@ -55,4 +55,4 @@ final class FirebaseMessagingServiceProvider
 }
 
 String _$firebaseMessagingServiceHash() =>
-    r'0777e979670cc1b43a5acf77343c132a84a1be7f';
+    r'bbeb89798816882e110210be7bcf88c4005ed765';

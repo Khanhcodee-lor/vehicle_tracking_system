@@ -56,4 +56,4 @@ final class FirebaseCrashlyticsServiceProvider
 }
 
 String _$firebaseCrashlyticsServiceHash() =>
-    r'b7a1398fbfd10798c48c1c73e5f3ea3e5008a731';
+    r'9e77fdfb93707b9eaac9bceca3c007462d8e3a70';
