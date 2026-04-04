@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -14,6 +15,22 @@ class FirebaseAuthService {
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
   User? get currentUser => _auth.currentUser;
+
+  bool get isGoogleSignInSupported {
+    if (kIsWeb) return true;
+
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        return true;
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        return false;
+    }
+  }
+
   // email/ password
   Future<UserCredential> signInWithEmail(String email, String password) async {
     try {
@@ -30,6 +47,12 @@ class FirebaseAuthService {
   // google
   Future<UserCredential> signInWithGoogle() async {
     try {
+      if (!isGoogleSignInSupported) {
+        throw UnsupportedError(
+          'Google Sign-In hiện chỉ hỗ trợ Android, iOS, macOS và Web.',
+        );
+      }
+
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) throw Exception('Google Sign-In cancelled');
 

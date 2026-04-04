@@ -1,5 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../../../../core/error/error_mapper.dart';
 import '../../data/repositories/auth_repository_impl.dart';
+import '../../domain/entities/app_user.dart';
 import '../../domain/repositories/auth_repository.dart';
 import 'auth_state.dart';
 
@@ -20,47 +22,26 @@ class AuthController extends _$AuthController {
     }
   }
 
-  Future<void> signInWithGoogle() async {
+  Future<void> _authenticate(Future<AppUser?> Function() action) async {
     state = const AuthState.loading();
     try {
-      final user = await _repository.signInWithGoogle();
-      if (user != null) {
-        state = AuthState.authenticated(user);
-      } else {
-        state = const AuthState.unauthenticated();
-      }
+      final user = await action();
+      state = user != null
+          ? AuthState.authenticated(user)
+          : const AuthState.unauthenticated();
     } catch (e) {
-      state = AuthState.error(e.toString());
+      state = AuthState.error(mapExceptionToFailure(e).message);
     }
   }
 
-  Future<void> signInWithEmail(String email, String password) async {
-    state = const AuthState.loading();
-    try {
-      final user = await _repository.signInWithEmail(email, password);
-      if (user != null) {
-        state = AuthState.authenticated(user);
-      } else {
-        state = const AuthState.unauthenticated();
-      }
-    } catch (e) {
-      state = AuthState.error(e.toString());
-    }
-  }
+  Future<void> signInWithGoogle() =>
+      _authenticate(() => _repository.signInWithGoogle());
 
-  Future<void> signUpWithEmail(String email, String password) async {
-    state = const AuthState.loading();
-    try {
-      final user = await _repository.signUpWithEmail(email, password);
-      if (user != null) {
-        state = AuthState.authenticated(user);
-      } else {
-        state = const AuthState.unauthenticated();
-      }
-    } catch (e) {
-      state = AuthState.error(e.toString());
-    }
-  }
+  Future<void> signInWithEmail(String email, String password) =>
+      _authenticate(() => _repository.signInWithEmail(email, password));
+
+  Future<void> signUpWithEmail(String email, String password) =>
+      _authenticate(() => _repository.signUpWithEmail(email, password));
 
   Future<void> signOut() async {
     state = const AuthState.loading();
@@ -68,7 +49,7 @@ class AuthController extends _$AuthController {
       await _repository.signOut();
       state = const AuthState.unauthenticated();
     } catch (e) {
-      state = AuthState.error(e.toString());
+      state = AuthState.error(mapExceptionToFailure(e).message);
     }
   }
 }

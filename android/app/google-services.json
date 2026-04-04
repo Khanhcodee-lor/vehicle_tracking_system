@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "137708856251",
+    "firebase_url": "https://vehicle-tracking-system-9de9d-default-rtdb.firebaseio.com",
     "project_id": "vehicle-tracking-system-9de9d",
     "storage_bucket": "vehicle-tracking-system-9de9d.firebasestorage.app"
   },
@@ -12,7 +13,20 @@
           "package_name": "com.example.vehicle_tracking_system"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "137708856251-2g68ffguual3dclc5r7tktq51754h7ua.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.vehicle_tracking_system",
+            "certificate_hash": "255d3b4d46bb6f8e5b65803401fd4fb459590296"
+          }
+        },
+        {
+          "client_id": "137708856251-9f4ls2ia2qu1n61025frnnq9eph7477r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCKxnxSJyyaahb11SvCL8m9F_zBeKue3yQ"
@@ -20,7 +34,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "137708856251-9f4ls2ia2qu1n61025frnnq9eph7477r.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "137708856251-sbavasfjvp4p333o3pe9vrjs3qnhfh22.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.vehicleTrackingSystem"
+              }
+            }
+          ]
         }
       }
     }

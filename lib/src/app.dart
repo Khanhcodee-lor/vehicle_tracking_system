@@ -1,12 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'core/constants/app_colors.dart';
-import 'features/auth/presentation/auth_page.dart';
-import 'features/home/presentation/home_page.dart';
+import 'core/routers/app_router.dart';
 
 class App extends ConsumerWidget {
   const App({super.key});
@@ -19,10 +17,12 @@ class App extends ConsumerWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp(
+          navigatorKey: AppRouter.navigatorKey,
           title: 'Vehicle Tracking System',
           debugShowCheckedModeBanner: false,
           theme: _buildAppTheme(),
-          home: const AuthGate(),
+          initialRoute: AppRouter.root,
+          onGenerateRoute: AppRouter.onGenerateRoute,
         );
       },
     );
@@ -123,30 +123,6 @@ class App extends ConsumerWidget {
           elevation: 2,
         ),
       ),
-    );
-  }
-}
-
-class AuthGate extends StatelessWidget {
-  const AuthGate({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
-
-        if (snapshot.hasData) {
-          return const HomePage();
-        }
-
-        return const AuthPage();
-      },
     );
   }
 }
