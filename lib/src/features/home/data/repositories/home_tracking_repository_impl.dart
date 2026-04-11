@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
 
@@ -61,11 +60,6 @@ class HomeTrackingRepositoryImpl implements HomeTrackingRepository {
     void emitSnapshot(VehicleTrackingSnapshot snapshot) {
       if (controller.isClosed) return;
       permissionDeniedReported = false;
-      debugPrint(
-        'TRACK emit snapshot vehicle=${snapshot.vehicleId} '
-        'lat=${snapshot.location.latitude} lng=${snapshot.location.longitude} '
-        'speed=${snapshot.speedKmh} updatedAt=${snapshot.updatedAt}',
-      );
       controller.add(snapshot);
     }
 
@@ -100,22 +94,18 @@ class HomeTrackingRepositoryImpl implements HomeTrackingRepository {
 
         for (final path in candidatePaths) {
           try {
-            debugPrint('TRACK try path=$path');
             LoggerUtils.i('RTDB try path: $path');
             final parsed = await fetchOnce(path);
             if (parsed == null) {
-              debugPrint('TRACK no payload path=$path');
               LoggerUtils.d('RTDB no vehicle payload at path: $path');
               continue;
             }
 
             activePath = path;
-            debugPrint('TRACK active path=$path');
             LoggerUtils.i('RTDB active path: $path');
             emitSnapshot(parsed);
             return path;
           } catch (error, stackTrace) {
-            debugPrint('TRACK path error path=$path error=$error');
             if (isPermissionDenied(error)) {
               LoggerUtils.firebaseError(
                 'HomeTrackingRepositoryImpl.discoverActivePath:$path',
