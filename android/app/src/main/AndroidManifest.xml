@@ -4,7 +4,7 @@
 
     <application
         android:label="vehicle_tracking_system"
-        android:name="${applicationName}"
+        android:name=".VehicleTrackingApplication"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

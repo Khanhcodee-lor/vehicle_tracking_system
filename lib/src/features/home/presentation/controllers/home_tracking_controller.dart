@@ -72,8 +72,14 @@ class HomeTrackingController extends _$HomeTrackingController {
         _watchVehicleTrackingUseCase(vehicleId: _targetVehicleId).listen(
           _onVehicleSnapshot,
           onError: (error, stackTrace) {
+            final errorMessage = error.toString().toLowerCase();
+            final isPermissionDenied =
+                errorMessage.contains('permission denied') ||
+                errorMessage.contains('permission_denied');
             state = state.copyWith(
-              vehicleStatus: 'Dang thu ket noi du lieu xe',
+              vehicleStatus: isPermissionDenied
+                  ? 'Bi chan doc du lieu xe (Firebase rules)'
+                  : 'Dang thu ket noi du lieu xe',
             );
           },
         );

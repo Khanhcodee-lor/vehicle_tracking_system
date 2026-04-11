@@ -1,9 +1,12 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
 
+import '../../../../core/ulits/logger_ulits.dart';
 import '../../domain/entities/location_point.dart';
 import '../../domain/entities/vehicle_tracking_snapshot.dart';
 import '../../domain/repositories/home_tracking_repository.dart';
@@ -14,40 +17,148 @@ class HomeTrackingRepositoryImpl implements HomeTrackingRepository {
 
   final HomeRemoteDataSource _remoteDataSource;
 
-  static const List<String> _streamPaths = ['/', 'gps', 'GPS'];
+  static List<String> _candidatePayloadPaths(String vehicleId) {
+    return <String>[
+      'vehicles/$vehicleId',
+      'gps/$vehicleId',
+      vehicleId,
+      'gps',
+      '/',
+    ];
+  }
 
   @override
   Stream<VehicleTrackingSnapshot> watchVehicleTracking({
     required String vehicleId,
   }) {
     final controller = StreamController<VehicleTrackingSnapshot>();
+    final candidatePaths = _candidatePayloadPaths(vehicleId);
 
     StreamSubscription<DatabaseEvent>? subscription;
-    Timer? fallbackTimer;
-    var currentPathIndex = 0;
+    Timer? discoveryTimer;
+    String? activePath;
+    var isDiscovering = false;
+    var permissionDeniedReported = false;
+    late void Function() startDiscoveryPolling;
 
-    Future<void> fetchOnce(String path) async {
+    bool isPermissionDenied(Object error) {
+      final message = error.toString().toLowerCase();
+      return message.contains('permission denied') ||
+          message.contains('permission_denied');
+    }
+
+    Future<void> ensureAuthToken() async {
       try {
-        final snapshot = await _remoteDataSource.getRealtimeData(path);
-        final parsed = _parseVehicleSnapshot(snapshot.value, vehicleId);
-        if (parsed != null && !controller.isClosed) {
-          controller.add(parsed);
+        final user = FirebaseAuth.instance.currentUser;
+        if (user != null) {
+          await user.getIdToken(true);
         }
       } catch (_) {
-        // Ignore one-shot read failures here; stream/fallback handles reconnection.
+        // Ignore token refresh errors; stream/getData will report detailed errors.
       }
     }
 
-    void startFallbackPolling() {
-      fallbackTimer ??= Timer.periodic(const Duration(seconds: 5), (_) {
-        unawaited(fetchOnce('/'));
-      });
-      unawaited(fetchOnce('/'));
+    void emitSnapshot(VehicleTrackingSnapshot snapshot) {
+      if (controller.isClosed) return;
+      permissionDeniedReported = false;
+      debugPrint(
+        'TRACK emit snapshot vehicle=${snapshot.vehicleId} '
+        'lat=${snapshot.location.latitude} lng=${snapshot.location.longitude} '
+        'speed=${snapshot.speedKmh} updatedAt=${snapshot.updatedAt}',
+      );
+      controller.add(snapshot);
     }
 
-    void startListen(int index) {
-      final path = _streamPaths[index];
-      unawaited(fetchOnce(path));
+    Future<void> reportPermissionDenied(
+      Object error,
+      StackTrace stackTrace,
+    ) async {
+      if (permissionDeniedReported || !isPermissionDenied(error)) {
+        return;
+      }
+
+      permissionDeniedReported = true;
+      if (!controller.isClosed) {
+        controller.addError(error, stackTrace);
+      }
+    }
+
+    Future<VehicleTrackingSnapshot?> fetchOnce(String path) async {
+      final snapshot = await _remoteDataSource.getRealtimeData(path);
+      return _parseVehicleSnapshot(snapshot.value, vehicleId);
+    }
+
+    Future<String?> discoverActivePath() async {
+      if (isDiscovering || controller.isClosed) return activePath;
+
+      isDiscovering = true;
+      Object? lastPermissionDeniedError;
+      StackTrace? lastPermissionDeniedStackTrace;
+
+      try {
+        await ensureAuthToken();
+
+        for (final path in candidatePaths) {
+          try {
+            debugPrint('TRACK try path=$path');
+            LoggerUtils.i('RTDB try path: $path');
+            final parsed = await fetchOnce(path);
+            if (parsed == null) {
+              debugPrint('TRACK no payload path=$path');
+              LoggerUtils.d('RTDB no vehicle payload at path: $path');
+              continue;
+            }
+
+            activePath = path;
+            debugPrint('TRACK active path=$path');
+            LoggerUtils.i('RTDB active path: $path');
+            emitSnapshot(parsed);
+            return path;
+          } catch (error, stackTrace) {
+            debugPrint('TRACK path error path=$path error=$error');
+            if (isPermissionDenied(error)) {
+              LoggerUtils.firebaseError(
+                'HomeTrackingRepositoryImpl.discoverActivePath:$path',
+                error,
+                stackTrace,
+              );
+              lastPermissionDeniedError = error;
+              lastPermissionDeniedStackTrace = stackTrace;
+            } else {
+              LoggerUtils.e(
+                'RTDB read failed at path: $path',
+                error,
+                stackTrace,
+              );
+            }
+          }
+        }
+
+        if (lastPermissionDeniedError != null &&
+            lastPermissionDeniedStackTrace != null) {
+          await reportPermissionDenied(
+            lastPermissionDeniedError,
+            lastPermissionDeniedStackTrace,
+          );
+        }
+
+        return null;
+      } finally {
+        isDiscovering = false;
+      }
+    }
+
+    Future<void> attachRealtimeListener() async {
+      if (subscription != null || controller.isClosed) return;
+
+      final path = await discoverActivePath();
+      if (path == null || controller.isClosed || subscription != null) {
+        return;
+      }
+
+      discoveryTimer?.cancel();
+      discoveryTimer = null;
+      LoggerUtils.i('RTDB attach realtime listener: $path');
       subscription = _remoteDataSource
           .watchRealtimeData(path)
           .listen(
@@ -57,28 +168,39 @@ class HomeTrackingRepositoryImpl implements HomeTrackingRepository {
                 vehicleId,
               );
               if (parsed != null) {
-                fallbackTimer?.cancel();
-                fallbackTimer = null;
-                controller.add(parsed);
+                emitSnapshot(parsed);
               }
             },
-            onError: (error, stackTrace) {
-              if (currentPathIndex < _streamPaths.length - 1) {
-                currentPathIndex += 1;
-                subscription?.cancel();
-                startListen(currentPathIndex);
-                return;
+            onError: (error, stackTrace) async {
+              LoggerUtils.e(
+                'RTDB realtime listener error at path: $path',
+                error,
+                stackTrace,
+              );
+              await subscription?.cancel();
+              subscription = null;
+
+              if (isPermissionDenied(error)) {
+                await reportPermissionDenied(error, stackTrace);
               }
-              startFallbackPolling();
+
+              startDiscoveryPolling();
             },
           );
     }
 
-    startListen(currentPathIndex);
+    startDiscoveryPolling = () {
+      discoveryTimer ??= Timer.periodic(const Duration(seconds: 5), (_) {
+        unawaited(attachRealtimeListener());
+      });
+      unawaited(attachRealtimeListener());
+    };
+
+    startDiscoveryPolling();
 
     controller.onCancel = () async {
       await subscription?.cancel();
-      fallbackTimer?.cancel();
+      discoveryTimer?.cancel();
     };
 
     return controller.stream;
@@ -145,17 +267,8 @@ class HomeTrackingRepositoryImpl implements HomeTrackingRepository {
     final gps = _extractGpsMap(payload);
     if (gps == null) return null;
 
-    final lat = _toDouble(
-      gps['lat'] ?? gps['Lat'] ?? gps['latitude'] ?? gps['Latitude'],
-    );
-    final lng = _toDouble(
-      gps['lng'] ??
-          gps['Lng'] ??
-          gps['lon'] ??
-          gps['Lon'] ??
-          gps['longitude'] ??
-          gps['Longitude'],
-    );
+    final lat = _toDouble(gps['lat'] ?? gps['latitude']);
+    final lng = _toDouble(gps['lng'] ?? gps['lon'] ?? gps['longitude']);
     if (lat == null || lng == null) return null;
 
     final speed = _toDouble(gps['speed']);
@@ -198,17 +311,8 @@ class HomeTrackingRepositoryImpl implements HomeTrackingRepository {
 
       final gps = _extractGpsMap(current);
       if (gps != null) {
-        final lat = _toDouble(
-          gps['lat'] ?? gps['Lat'] ?? gps['latitude'] ?? gps['Latitude'],
-        );
-        final lng = _toDouble(
-          gps['lng'] ??
-              gps['Lng'] ??
-              gps['lon'] ??
-              gps['Lon'] ??
-              gps['longitude'] ??
-              gps['Longitude'],
-        );
+        final lat = _toDouble(gps['lat'] ?? gps['latitude']);
+        final lng = _toDouble(gps['lng'] ?? gps['lon'] ?? gps['longitude']);
         if (lat != null && lng != null) {
           candidates.add(current);
         }
@@ -247,20 +351,11 @@ class HomeTrackingRepositoryImpl implements HomeTrackingRepository {
   }
 
   Map<dynamic, dynamic>? _extractGpsMap(Map<dynamic, dynamic> data) {
-    final gps = data['gps'] ?? data['GPS'] ?? data['Gps'];
+    final gps = data['gps'];
     if (gps is Map) return gps;
 
-    final lat = _toDouble(
-      data['lat'] ?? data['Lat'] ?? data['latitude'] ?? data['Latitude'],
-    );
-    final lng = _toDouble(
-      data['lng'] ??
-          data['Lng'] ??
-          data['lon'] ??
-          data['Lon'] ??
-          data['longitude'] ??
-          data['Longitude'],
-    );
+    final lat = _toDouble(data['lat'] ?? data['latitude']);
+    final lng = _toDouble(data['lng'] ?? data['lon'] ?? data['longitude']);
 
     if (lat != null && lng != null) {
       return data;

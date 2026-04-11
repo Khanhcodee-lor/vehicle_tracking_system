@@ -1,0 +1,198 @@
+Launching lib\main.dart on 23049RAD8C in debug mode...
+Running Gradle task 'assembleDebug'...                          
+
+D:\Workspace\Project\Flutter\vehicle_tracking_system\android>if "Windows_NT" == "Windows_NT" setlocal
+
+D:\Workspace\Project\Flutter\vehicle_tracking_system\android>set DEFAULT_JVM_OPTS= 
+
+D:\Workspace\Project\Flutter\vehicle_tracking_system\android>set DIRNAME=D:\Workspace\Project\Flutter\vehicle_tracking_system\android\ 
+
+D:\Workspace\Project\Flutter\vehicle_tracking_system\android>if "D:\Workspace\Project\Flutter\vehicle_tracking_system\android\" == "" set DIRNAME=. 
+
+D:\Workspace\Project\Flutter\vehicle_tracking_system\android>set APP_BASE_NAME=gradlew 
+
+D:\Workspace\Project\Flutter\vehicle_tracking_system\android>set APP_HOME=D:\Workspace\Project\Flutter\vehicle_tracking_system\android\ 
+
+D:\Workspace\Project\Flutter\vehicle_tracking_system\android>if defined JAVA_HOME goto findJavaFromJavaHome 
+
+D:\Workspace\Project\Flutter\vehicle_tracking_system\android>set JAVA_HOME=C:\Program Files\Android\Android Studio\jbr 
+
+D:\Workspace\Project\Flutter\vehicle_tracking_system\android>set JAVA_EXE=C:\Program Files\Android\Android Studio\jbr/bin/java.exe 
+
+D:\Workspace\Project\Flutter\vehicle_tracking_system\android>if exist "C:\Program Files\Android\Android Studio\jbr/bin/java.exe" goto init 
+
+D:\Workspace\Project\Flutter\vehicle_tracking_system\android>if not "Windows_NT" == "Windows_NT" goto win9xME_args 
+
+D:\Workspace\Project\Flutter\vehicle_tracking_system\android>if "@eval[2+2]" == "4" goto 4NT_args 
+
+D:\Workspace\Project\Flutter\vehicle_tracking_system\android>set CMD_LINE_ARGS= 
+
+D:\Workspace\Project\Flutter\vehicle_tracking_system\android>set _SKIP=2 
+
+D:\Workspace\Project\Flutter\vehicle_tracking_system\android>if "x-q" == "x" goto execute 
+
+D:\Workspace\Project\Flutter\vehicle_tracking_system\android>set CMD_LINE_ARGS=-q -Ptarget-platform=android-arm64 -Ptarget=D:\Workspace\Project\Flutter\vehicle_tracking_system\lib\main.dart -Pbase-application-name=android.app.Application -Pdart-defines=RkxVVFRFUl9WRVJTSU9OPTMuNDEuMw==,RkxVVFRFUl9DSEFOTkVMPXN0YWJsZQ==,RkxVVFRFUl9HSVRfVVJMPWh0dHBzOi8vZ2l0aHViLmNvbS9mbHV0dGVyL2ZsdXR0ZXIuZ2l0,RkxVVFRFUl9GUkFNRVdPUktfUkVWSVNJT049NDhjMzJhZjAzNA==,RkxVVFRFUl9FTkdJTkVfUkVWSVNJT049MzI3ZWQ4MTQ1MA==,RkxVVFRFUl9EQVJUX1ZFUlNJT049My4xMS4x -Pdart-obfuscation=false -Ptrack-widget-creation=true -Ptree-shake-icons=false -Pfilesystem-scheme=org-dartlang-root assembleDebug 
+
+D:\Workspace\Project\Flutter\vehicle_tracking_system\android>goto execute 
+
+D:\Workspace\Project\Flutter\vehicle_tracking_system\android>set CLASSPATH=D:\Workspace\Project\Flutter\vehicle_tracking_system\android\\gradle\wrapper\gradle-wrapper.jar 
+
+D:\Workspace\Project\Flutter\vehicle_tracking_system\android>"C:\Program Files\Android\Android Studio\jbr/bin/java.exe"    "-Dorg.gradle.appname=gradlew" -classpath "D:\Workspace\Project\Flutter\vehicle_tracking_system\android\\gradle\wrapper\gradle-wrapper.jar" org.gradle.wrapper.GradleWrapperMain -q -Ptarget-platform=android-arm64 -Ptarget=D:\Workspace\Project\Flutter\vehicle_tracking_system\lib\main.dart -Pbase-application-name=android.app.Application -Pdart-defines=RkxVVFRFUl9WRVJTSU9OPTMuNDEuMw==,RkxVVFRFUl9DSEFOTkVMPXN0YWJsZQ==,RkxVVFRFUl9HSVRfVVJMPWh0dHBzOi8vZ2l0aHViLmNvbS9mbHV0dGVyL2ZsdXR0ZXIuZ2l0,RkxVVFRFUl9GUkFNRVdPUktfUkVWSVNJT049NDhjMzJhZjAzNA==,RkxVVFRFUl9FTkdJTkVfUkVWSVNJT049MzI3ZWQ4MTQ1MA==,RkxVVFRFUl9EQVJUX1ZFUlNJT049My4xMS4x -Pdart-obfuscation=false -Ptrack-widget-creation=true -Ptree-shake-icons=false -Pfilesystem-scheme=org-dartlang-root assembleDebug 
+
+D:\Workspace\Project\Flutter\vehicle_tracking_system\android>if "0" == "0" goto mainEnd 
+
+D:\Workspace\Project\Flutter\vehicle_tracking_system\android>if "Windows_NT" == "Windows_NT" endlocal
+Running Gradle task 'assembleDebug'...                              6.5s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...           5.2s
+D/FlutterJNI(26786): Beginning load of flutter...
+D/FlutterJNI(26786): flutter (null) was loaded normally!
+I/flutter (26786): [IMPORTANT:flutter/shell/platform/android/android_context_vk_impeller.cc(62)] Using the Impeller rendering backend (Vulkan).
+D/FlutterGeolocator(26786): Attaching Geolocator to activity
+D/FlutterRenderer(26786): Width is zero. 0,0
+D/FlutterRenderer(26786): Width is zero. 0,0
+D/FlutterJNI(26786): Sending viewport metrics to the engine.
+D/FlutterGeolocator(26786): Creating service.
+D/FlutterGeolocator(26786): Binding to location service.
+D/FlutterGeolocator(26786): Geolocator foreground service connected
+D/FlutterGeolocator(26786): Initializing Geolocator services
+D/FlutterGeolocator(26786): Flutter engine connected. Connected engine count 1
+D/FlutterJNI(26786): Sending viewport metrics to the engine.
+Syncing files to device 23049RAD8C...                           
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+Syncing files to device 23049RAD8C...                              134ms
+
+Flutter run key commands.
+r Hot reload. 
+R Hot restart.
+h List all available interactive commands.
+d Detach (terminate "flutter run" but leave application running).
+c Clear the screen
+q Quit (terminate the application on the device).
+
+A Dart VM Service on 23049RAD8C is available at: http://127.0.0.1:54644/bIELF7w9yL4=/
+The Flutter DevTools debugger and profiler on 23049RAD8C is available at: http://127.0.0.1:54644/bIELF7w9yL4=/devtools/?uri=ws://127.0.0.1:54644/bIELF7w9yL4=/ws
+I/Choreographer(26786): Skipped 72 frames!  The application may be doing too much work on its main thread.
+W/Looper  (26786): PerfMonitor doFrame : time=1ms vsyncFrame=0 latency=603ms procState=-1
+W/1.raster(26786): type=1400 audit(0.0:735644): avc: denied { getattr } for path="/sys/module/metis/parameters/minor_window_app" dev="sysfs" ino=69787 scontext=u:r:untrusted_app:s0:c18,c258,c512,c768 tcontext=u:object_r:sysfs_migt:s0 tclass=file permissive=0 app=com.example.vehicle_tracking_system
+I/tracking_system(26786): DF top: com.example.vehicle_tracking_system : 90
+I/tracking_system(26786): DF com.example.vehicle_tracking_system Support Dynamic FPS.
+I/tracking_system(26786): ProcessProfilingInfo new_methods=9168 is saved saved_to_disk=1 resolve_classes_delay=8000
+I/Choreographer(26786): Skipped 110 frames!  The application may be doing too much work on its main thread.
+D/DecorView[](26786): getWindowModeFromSystem  windowmode is 1
+D/DecorView[](26786): updateDecorCaptionStatus windowMode is 1
+D/FlutterJNI(26786): Sending viewport metrics to the engine.
+D/VRI[MainActivity](26786): vri.reportNextDraw android.view.ViewRootImpl.performTraversals:3782 android.view.ViewRootImpl.doTraversal:2546 android.view.ViewRootImpl$TraversalRunnable.run:9498 android.view.Choreographer$CallbackRecord.run:1459 android.view.Choreographer$CallbackRecord.run:1467 
+D/VRI[MainActivity](26786): vri.Setup new sync id=0 syncSeqId=0
+D/tracking_system(26786): MiuiProcessManagerServiceStub setSchedFifo
+I/MiuiProcessManagerImpl(26786): setSchedFifo pid:26786, mode:3
+E/libEGL  (26786): pre_cache appList: ,,
+E/perf_hint(26786): Session creation failed, mPreferredRateNanos: -1
+W/Looper  (26786): PerfMonitor doFrame : time=25ms vsyncFrame=0 latency=924ms procState=-1 historyMsgCount=7
+I/OpenGLRenderer(26786): Davey! duration=947ms; Flags=1, FrameTimelineVsyncId=230726652, IntendedVsync=224182236667066, Vsync=224183155566366, InputEventId=0, HandleInputStart=224183160542655, AnimationStart=224183160546301, PerformTraversalsStart=224183160549530, DrawStart=224183172071561, FrameDeadline=224182250333732, FrameInterval=224183160295207, FrameStartTime=8353630, SyncQueued=224183173043020, SyncStart=224183173211249, IssueDrawCommandsStart=224183174565832, SwapBuffers=224183182760467, FrameCompleted=224183184173697, DequeueBufferDuration=371459, QueueBufferDuration=753750, GpuCompleted=224183183646561, SwapBuffersCompleted=224183184173697, DisplayPresentTime=0, CommandSubmissionCompleted=224183182760467, 
+D/VRI[MainActivity](26786): vri.reportDrawFinished syncSeqId=0 android.view.ViewRootImpl.lambda$createSyncIfNeeded$4$android-view-ViewRootImpl:3850 android.view.ViewRootImpl$$ExternalSyntheticLambda1.run:6 android.os.Handler.handleCallback:942 android.os.Handler.dispatchMessage:99 android.os.Looper.loopOnce:211 
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/DecorView[](26786): onWindowFocusChanged hasWindowFocus true
+I/HandWritingStubImpl(26786): refreshLastKeyboardType: 1
+I/HandWritingStubImpl(26786): getCurrentKeyboardType: 1
+D/TrafficStats(26786): tagSocket(190) with statsTag=0xffffffff, statsUid=-1
+I/HandWritingStubImpl(26786): getCurrentKeyboardType: 1
+D/FlutterJNI(26786): Sending viewport metrics to the engine.
+E/FlutterGeolocator(26786): Geolocator position updates started
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+D/TrafficStats(26786): tagSocket(204) with statsTag=0xffffffff, statsUid=-1
+D/ProfileInstaller(26786): Installing profile for com.example.vehicle_tracking_system
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+I/tracking_system(26786): This is non sticky GC, maxfree is 33554432 minfree is 8388608
+W/FinalizerDaemon(26786): type=1400 audit(0.0:735673): avc: denied { getopt } for path="/dev/socket/usap_pool_primary" scontext=u:r:untrusted_app:s0:c18,c258,c512,c768 tcontext=u:r:zygote:s0 tclass=unix_stream_socket permissive=0 app=com.example.vehicle_tracking_system
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+D/DecorView[](26786): onWindowFocusChanged hasWindowFocus false
+D/DecorView[](26786): onWindowFocusChanged hasWindowFocus true
+I/HandWritingStubImpl(26786): refreshLastKeyboardType: 1
+I/HandWritingStubImpl(26786): getCurrentKeyboardType: 1
+W/OnBackInvokedCallback(26786): OnBackInvokedCallback is not enabled for the application.
+W/OnBackInvokedCallback(26786): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+D/DecorView[](26786): onWindowFocusChanged hasWindowFocus false
+D/FirebaseSessions(26786): App backgrounded on com.example.vehicle_tracking_system
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+I/FA      (26786): Application backgrounded at: timestamp_millis: 1775925577711
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+I/TRuntime.CctTransportBackend(26786): Making request to: https://firebaselogging-pa.googleapis.com/v1/firelog/legacy/batchlog
+D/TrafficStats(26786): tagSocket(3) with statsTag=0xffffffff, statsUid=-1
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+I/TRuntime.CctTransportBackend(26786): Status Code: 200
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+W/System  (26786): Ignoring header X-Firebase-Locale because its value was null.
+W/LocalRequestInterceptor(26786): Error getting App Check token; using placeholder token instead. Error: com.google.firebase.FirebaseException: No AppCheckProvider installed.
+D/FirebaseAuth(26786): Notifying id token listeners about user ( JkZqyiq4b8fCcZPJWgyNmgQ4r6s1 ).
+Lost connection to device.

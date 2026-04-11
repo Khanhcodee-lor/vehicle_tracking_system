@@ -33,6 +33,11 @@ android {
         versionName = flutter.versionName
     }
 
+    dependenciesInfo {
+        includeInApk = true
+        includeInBundle = true
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
@@ -44,4 +49,11 @@ android {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    implementation(platform("com.google.firebase:firebase-bom:34.9.0"))
+    debugImplementation("com.google.firebase:firebase-appcheck-debug")
+    profileImplementation("com.google.firebase:firebase-appcheck-playintegrity")
+    releaseImplementation("com.google.firebase:firebase-appcheck-playintegrity")
 }
