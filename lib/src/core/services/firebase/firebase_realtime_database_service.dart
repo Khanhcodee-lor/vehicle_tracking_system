@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -6,42 +7,58 @@ part 'firebase_realtime_database_service.g.dart';
 /// Service hỗ trợ thao tác với Firebase Realtime Database
 /// Cung cấp các phương thức cơ bản: lấy dữ liệu 1 lần, lắng nghe realtime, thêm, sửa, xóa
 class FirebaseRealtimeDatabaseService {
-  final FirebaseDatabase _db = FirebaseDatabase.instance;
+  static const String _databaseUrl =
+      'https://vehicle-tracking-system-9de9d-default-rtdb.firebaseio.com/';
+
+  final FirebaseDatabase _db = FirebaseDatabase.instanceFor(
+    app: Firebase.app(),
+    databaseURL: _databaseUrl,
+  );
+
+  DatabaseReference _refForPath(String path) {
+    final trimmed = path.trim();
+    if (trimmed.isEmpty || trimmed == '/') {
+      return _db.ref();
+    }
+
+    final normalized = trimmed.startsWith('/') ? trimmed.substring(1) : trimmed;
+    return _db.ref(normalized);
+  }
 
   /// Lấy dữ liệu một lần (Future)
   Future<DataSnapshot> getData(String path) async {
-    final ref = _db.ref(path);
+    final ref = _refForPath(path);
     return await ref.get();
   }
 
   /// Lắng nghe dữ liệu (Stream) thay đổi realtime
   Stream<DatabaseEvent> streamData(String path) {
-    return _db.ref(path).onValue;
+    return _refForPath(path).onValue;
   }
 
   /// Lắng nghe dữ liệu khi có thay đổi (Child added, changed, removed, moved)
   Stream<DatabaseEvent> streamChildAdded(String path) {
-    return _db.ref(path).onChildAdded;
+    return _refForPath(path).onChildAdded;
   }
 
   /// Ghi đè toàn bộ dữ liệu tại đường dẫn (Set)
   Future<void> setData(String path, dynamic data) async {
-    await _db.ref(path).set(data);
+    await _refForPath(path).set(data);
   }
 
   /// Cập nhật một phần dữ liệu tại đường dẫn (Update) - Thuong dung `Map<String, dynamic>`
   Future<void> updateData(String path, Map<String, dynamic> data) async {
-    await _db.ref(path).update(data);
+    await _refForPath(path).update(data);
   }
 
   /// Xóa dữ liệu tại đường dẫn
   Future<void> deleteData(String path) async {
-    await _db.ref(path).remove();
+    await _refForPath(path).remove();
   }
 
   /// Tạo một node mới với key tự động sinh ra và đẩy dữ liệu vào
   Future<void> pushData(String path, dynamic data) async {
-    final newRef = _db.ref(path).push();
+    final newRef = _refForPath(path).push();
     await newRef.set(data);
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../features/auth/presentation/auth_page.dart';
 import '../../features/home/presentation/home_page.dart';
+import '../../features/profile/presentation/profile_page.dart';
 
 class AppRouter {
   AppRouter._();
@@ -13,6 +14,7 @@ class AppRouter {
   static const String root = '/';
   static const String auth = '/auth';
   static const String home = '/home';
+  static const String profile = '/profile';
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -22,6 +24,8 @@ class AppRouter {
         return _buildRoute(settings: settings, child: const AuthPage());
       case home:
         return _buildRoute(settings: settings, child: const HomePage());
+      case profile:
+        return _buildRoute(settings: settings, child: const ProfilePage());
       default:
         return _buildRoute(
           settings: settings,

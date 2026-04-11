@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -7,7 +9,9 @@ import 'package:latlong2/latlong.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/routers/app_router.dart';
-import '../../../core/services/firebase/firebase_auth_service.dart';
+import '../domain/entities/location_point.dart';
+import 'controllers/home_tracking_controller.dart';
+import 'controllers/home_tracking_state.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -19,19 +23,7 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   final MapController _mapController = MapController();
 
-  static final LatLng _vehicleLocation = LatLng(10.776889, 106.700897);
-  static final LatLng _currentLocation = LatLng(10.772545, 106.703892);
-  static final List<LatLng> _routePoints = [
-    LatLng(10.772545, 106.703892),
-    LatLng(10.774882, 106.702315),
-    LatLng(10.775944, 106.701601),
-    LatLng(10.776889, 106.700897),
-  ];
-
   static const String _vehicleName = 'Xe cua toi';
-  static const String _vehicleStatus = 'Dang di chuyen';
-  static const String _vehicleSpeed = '62 km/h';
-  static const String _vehicleAddress = '42 Nguyen Hue, Quan 1, TP HCM';
 
   String _displayName(User? user) {
     final displayName = user?.displayName?.trim();
@@ -61,22 +53,23 @@ class _HomePageState extends ConsumerState<HomePage> {
     return name.substring(0, 2).toUpperCase();
   }
 
-  void _centerOnVehicle() {
-    _mapController.move(_vehicleLocation, 15.8);
+  LatLng _toLatLng(LocationPoint location) {
+    return LatLng(location.latitude, location.longitude);
   }
 
-  void _centerOnCurrentLocation() {
-    _mapController.move(_currentLocation, 15.5);
+  void _centerOnVehicle(HomeTrackingState trackingState) {
+    if (!trackingState.hasVehicleLocation) return;
+    _mapController.move(_toLatLng(trackingState.vehicleLocation), 15.8);
   }
 
-  Future<void> _handleMenuAction(_HomeMenuAction action) async {
-    switch (action) {
-      case _HomeMenuAction.logout:
-        final authService = ref.read(firebaseAuthServiceProvider);
-        await authService.signOut();
-        if (!mounted) return;
-        await AppRouter.pushNamedAndRemoveUntil(AppRouter.auth);
-    }
+  Future<void> _centerOnCurrentLocation() async {
+    final controller = ref.read(homeTrackingControllerProvider.notifier);
+    await controller.refreshCurrentUserLocation();
+
+    final trackingState = ref.read(homeTrackingControllerProvider);
+    if (!trackingState.hasUserLocation) return;
+
+    _mapController.move(_toLatLng(trackingState.currentLocation), 15.5);
   }
 
   Future<void> _showVehicleDetailsSheet() async {
@@ -85,147 +78,198 @@ class _HomePageState extends ConsumerState<HomePage> {
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (context) {
-        return Container(
-          margin: EdgeInsets.all(12.r),
-          padding: EdgeInsets.fromLTRB(20.w, 14.h, 20.w, 24.h),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(28.r),
-          ),
-          child: SafeArea(
-            top: false,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 48.w,
-                  height: 5.h,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFD4DCE8),
-                    borderRadius: BorderRadius.circular(999.r),
-                  ),
-                ),
-                SizedBox(height: 18.h),
-                Row(
+        return Consumer(
+          builder: (context, ref, _) {
+            final trackingState = ref.watch(homeTrackingControllerProvider);
+
+            return Container(
+              margin: EdgeInsets.all(12.r),
+              padding: EdgeInsets.fromLTRB(20.w, 14.h, 20.w, 24.h),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(28.r),
+              ),
+              child: SafeArea(
+                top: false,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      width: 52.r,
-                      height: 52.r,
+                      width: 48.w,
+                      height: 5.h,
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(18.r),
-                      ),
-                      child: Icon(
-                        Icons.local_shipping_rounded,
-                        color: AppColors.primary,
-                        size: 28.r,
+                        color: const Color(0xFFD4DCE8),
+                        borderRadius: BorderRadius.circular(999.r),
                       ),
                     ),
-                    SizedBox(width: 14.w),
-                    Expanded(
-                      child: Column(
+                    SizedBox(height: 18.h),
+                    Row(
+                      children: [
+                        Container(
+                          width: 52.r,
+                          height: 52.r,
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(18.r),
+                          ),
+                          child: Icon(
+                            Icons.local_shipping_rounded,
+                            color: AppColors.primary,
+                            size: 28.r,
+                          ),
+                        ),
+                        SizedBox(width: 14.w),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                _vehicleName,
+                                style: Theme.of(context).textTheme.titleLarge
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.w800,
+                                      color: AppColors.textPrimary,
+                                    ),
+                              ),
+                              SizedBox(height: 4.h),
+                              Text(
+                                'Cap nhat luc ${trackingState.vehicleUpdatedAt}, theo doi thoi gian thuc',
+                                style: Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(color: AppColors.textSecondary),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20.h),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _VehicleMetricCard(
+                            label: 'Trang thai',
+                            value: trackingState.vehicleStatus,
+                            valueColor: AppColors.success,
+                          ),
+                        ),
+                        SizedBox(width: 12.w),
+                        Expanded(
+                          child: _VehicleMetricCard(
+                            label: 'Toc do',
+                            value: trackingState.vehicleSpeed,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 12.h),
+                    Row(
+                      children: const [
+                        Expanded(
+                          child: _VehicleMetricCard(
+                            label: 'Nhien lieu',
+                            value: '74%',
+                          ),
+                        ),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: _VehicleMetricCard(
+                            label: 'Nhiet do',
+                            value: '32 C',
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16.h),
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(16.r),
+                      decoration: BoxDecoration(
+                        color: AppColors.background,
+                        borderRadius: BorderRadius.circular(20.r),
+                      ),
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            _vehicleName,
-                            style: Theme.of(context).textTheme.titleLarge
-                                ?.copyWith(
-                                  fontWeight: FontWeight.w800,
-                                  color: AppColors.textPrimary,
-                                ),
+                          Icon(
+                            Icons.place_rounded,
+                            color: AppColors.primary,
+                            size: 22.r,
                           ),
-                          SizedBox(height: 4.h),
-                          Text(
-                            'Cap nhat luc 11:58, theo doi thoi gian thuc',
-                            style: Theme.of(context).textTheme.bodyMedium
-                                ?.copyWith(color: AppColors.textSecondary),
+                          SizedBox(width: 10.w),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Vi tri xe',
+                                  style: Theme.of(context).textTheme.bodySmall
+                                      ?.copyWith(
+                                        color: AppColors.textSecondary,
+                                      ),
+                                ),
+                                SizedBox(height: 4.h),
+                                Text(
+                                  trackingState.vehicleAddress,
+                                  style: Theme.of(context).textTheme.bodyLarge
+                                      ?.copyWith(
+                                        color: AppColors.textPrimary,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 12.h),
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(16.r),
+                      decoration: BoxDecoration(
+                        color: AppColors.background,
+                        borderRadius: BorderRadius.circular(20.r),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Icons.my_location_rounded,
+                            color: AppColors.primary,
+                            size: 22.r,
+                          ),
+                          SizedBox(width: 10.w),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Vi tri cua ban',
+                                  style: Theme.of(context).textTheme.bodySmall
+                                      ?.copyWith(
+                                        color: AppColors.textSecondary,
+                                      ),
+                                ),
+                                SizedBox(height: 4.h),
+                                Text(
+                                  trackingState.userAddress,
+                                  style: Theme.of(context).textTheme.bodyLarge
+                                      ?.copyWith(
+                                        color: AppColors.textPrimary,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 20.h),
-                Row(
-                  children: const [
-                    Expanded(
-                      child: _VehicleMetricCard(
-                        label: 'Trang thai',
-                        value: _vehicleStatus,
-                        valueColor: AppColors.success,
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: _VehicleMetricCard(
-                        label: 'Toc do',
-                        value: _vehicleSpeed,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 12.h),
-                Row(
-                  children: const [
-                    Expanded(
-                      child: _VehicleMetricCard(
-                        label: 'Nhien lieu',
-                        value: '74%',
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: _VehicleMetricCard(
-                        label: 'Nhiet do',
-                        value: '32 C',
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16.h),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(16.r),
-                  decoration: BoxDecoration(
-                    color: AppColors.background,
-                    borderRadius: BorderRadius.circular(20.r),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.place_rounded,
-                        color: AppColors.primary,
-                        size: 22.r,
-                      ),
-                      SizedBox(width: 10.w),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Vi tri hien tai',
-                              style: Theme.of(context).textTheme.bodySmall
-                                  ?.copyWith(color: AppColors.textSecondary),
-                            ),
-                            SizedBox(height: 4.h),
-                            Text(
-                              _vehicleAddress,
-                              style: Theme.of(context).textTheme.bodyLarge
-                                  ?.copyWith(
-                                    color: AppColors.textPrimary,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );
@@ -234,6 +278,20 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
+    final trackingState = ref.watch(homeTrackingControllerProvider);
+
+    final initialCenter = trackingState.hasVehicleLocation
+        ? _toLatLng(trackingState.vehicleLocation)
+        : (trackingState.hasUserLocation
+              ? _toLatLng(trackingState.currentLocation)
+              : LatLng(
+                  HomeTrackingState.defaultMapCenter.latitude,
+                  HomeTrackingState.defaultMapCenter.longitude,
+                ));
+
+    final routePoints = trackingState.routePoints
+        .map(_toLatLng)
+        .toList(growable: false);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -245,89 +303,69 @@ class _HomePageState extends ConsumerState<HomePage> {
         scrolledUnderElevation: 0,
         elevation: 0,
         titleSpacing: 16.w,
-        title: Row(
-          children: [
-            Container(
-              width: 46.r,
-              height: 46.r,
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [AppColors.primary, AppColors.secondary],
-                ),
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.primary.withValues(alpha: 0.22),
-                    blurRadius: 18,
-                    offset: const Offset(0, 8),
-                  ),
-                ],
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                _avatarLabel(user),
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ),
-            SizedBox(width: 12.w),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    _displayName(user),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: AppColors.textPrimary,
-                      fontWeight: FontWeight.w800,
+        title: GestureDetector(
+          onTap: () => AppRouter.pushNamed(AppRouter.profile),
+          child: Row(
+            children: [
+              user != null && user.photoURL != null && user.photoURL!.isNotEmpty
+                  ? CircleAvatar(
+                      radius: 23.r,
+                      backgroundImage: NetworkImage(user.photoURL!),
+                    )
+                  : Container(
+                      width: 46.r,
+                      height: 46.r,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [AppColors.primary, AppColors.secondary],
+                        ),
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primary.withValues(alpha: 0.22),
+                            blurRadius: 18,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        _avatarLabel(user),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w800,
+                            ),
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 2.h),
-                  Text(
-                    'Vehicle Tracking Dashboard',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.textSecondary,
+              SizedBox(width: 12.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      _displayName(user),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         actions: [
           _AppBarActionButton(
             icon: Icons.notifications_none_rounded,
             hasBadge: true,
             onTap: () {},
-          ),
-          SizedBox(width: 10.w),
-          PopupMenuButton<_HomeMenuAction>(
-            offset: const Offset(0, 48),
-            color: Colors.white,
-            elevation: 10,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.r),
-            ),
-            onSelected: _handleMenuAction,
-            itemBuilder: (context) => const [
-              PopupMenuItem<_HomeMenuAction>(
-                value: _HomeMenuAction.logout,
-                child: Text('Dang xuat'),
-              ),
-            ],
-            child: const _AppBarActionButton(
-              icon: Icons.menu_rounded,
-              onTap: null,
-            ),
           ),
           SizedBox(width: 16.w),
         ],
@@ -338,7 +376,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             child: FlutterMap(
               mapController: _mapController,
               options: MapOptions(
-                initialCenter: _vehicleLocation,
+                initialCenter: initialCenter,
                 initialZoom: 15.4,
                 minZoom: 4,
                 maxZoom: 18.5,
@@ -351,30 +389,33 @@ class _HomePageState extends ConsumerState<HomePage> {
                   retinaMode: RetinaMode.isHighDensity(context),
                   userAgentPackageName: 'com.example.vehicle_tracking_system',
                 ),
-                PolylineLayer(
-                  polylines: [
-                    Polyline(
-                      points: _routePoints,
-                      strokeWidth: 4,
-                      color: AppColors.primary.withValues(alpha: 0.18),
-                    ),
-                  ],
-                ),
+                if (routePoints.length >= 2)
+                  PolylineLayer(
+                    polylines: [
+                      Polyline(
+                        points: routePoints,
+                        strokeWidth: 4,
+                        color: AppColors.primary.withValues(alpha: 0.18),
+                      ),
+                    ],
+                  ),
                 MarkerLayer(
                   markers: [
-                    Marker(
-                      point: _currentLocation,
-                      width: 22.w,
-                      height: 22.h,
-                      child: const _UserLocationMarker(),
-                    ),
-                    Marker(
-                      point: _vehicleLocation,
-                      width: 110.w,
-                      height: 126.h,
-                      alignment: Alignment.topCenter,
-                      child: const _VehicleMarker(),
-                    ),
+                    if (trackingState.hasUserLocation)
+                      Marker(
+                        point: _toLatLng(trackingState.currentLocation),
+                        width: 22.w,
+                        height: 22.h,
+                        child: const _UserLocationMarker(),
+                      ),
+                    if (trackingState.hasVehicleLocation)
+                      Marker(
+                        point: _toLatLng(trackingState.vehicleLocation),
+                        width: 110.w,
+                        height: 126.h,
+                        alignment: Alignment.topCenter,
+                        child: const _VehicleMarker(),
+                      ),
                   ],
                 ),
               ],
@@ -451,14 +492,16 @@ class _HomePageState extends ConsumerState<HomePage> {
               children: [
                 _MapActionButton(
                   icon: Icons.my_location_rounded,
-                  onTap: _centerOnCurrentLocation,
+                  onTap: () {
+                    unawaited(_centerOnCurrentLocation());
+                  },
                 ),
                 SizedBox(height: 10.h),
                 _MapActionButton(
                   icon: Icons.local_shipping_rounded,
                   backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
-                  onTap: _centerOnVehicle,
+                  onTap: () => _centerOnVehicle(trackingState),
                 ),
                 SizedBox(height: 10.h),
                 _MapActionButton(
@@ -475,8 +518,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 }
-
-enum _HomeMenuAction { logout }
 
 class _AppBarActionButton extends StatelessWidget {
   const _AppBarActionButton({

@@ -8,7 +8,7 @@ import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/routers/app_router.dart';
 import '../../../core/services/firebase/firebase_auth_service.dart';
-import '../../../core/widgets/base_view.dart';
+import '../../../core/views/base_view.dart';
 import 'controllers/auth_controller.dart';
 import 'controllers/auth_state.dart';
 
