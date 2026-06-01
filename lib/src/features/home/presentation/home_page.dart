@@ -24,7 +24,7 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   final MapController _mapController = MapController();
 
-  static const String _vehicleName = 'Xe cua toi';
+  static const String _vehicleName = 'Xe của tôi';
   static const String _primaryMapUrl =
       'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
   static const String _fallbackMapUrl =
@@ -48,7 +48,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       return email.split('@').first;
     }
 
-    return 'Nguoi dung';
+    return 'Người dùng';
   }
 
   String _avatarLabel(User? user) {
@@ -150,7 +150,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   Future<void> _openDirectionsToVehicle(HomeTrackingState trackingState) async {
     if (!trackingState.hasVehicleLocation) {
-      _showMapMessage('Chua co vi tri xe de chi duong');
+      _showMapMessage('Chưa có vị trí xe để chỉ đường');
       return;
     }
 
@@ -197,7 +197,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       if (launched) return;
     }
 
-    _showMapMessage('Khong mo duoc ung dung chi duong');
+    _showMapMessage('Không mở được ứng dụng chỉ đường');
   }
 
   Future<void> _showVehicleDetailsSheet() async {
@@ -261,7 +261,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                               ),
                               SizedBox(height: 4.h),
                               Text(
-                                'Cap nhat luc ${trackingState.vehicleUpdatedAt}, theo doi thoi gian thuc',
+                                'Cập nhật lúc ${trackingState.vehicleUpdatedAt}, theo dõi thời gian thực',
                                 style: Theme.of(context).textTheme.bodyMedium
                                     ?.copyWith(color: AppColors.textSecondary),
                               ),
@@ -275,7 +275,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                       children: [
                         Expanded(
                           child: _VehicleMetricCard(
-                            label: 'Trang thai',
+                            label: 'Trạng thái',
                             value: trackingState.vehicleStatus,
                             valueColor: AppColors.success,
                           ),
@@ -283,7 +283,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         SizedBox(width: 12.w),
                         Expanded(
                           child: _VehicleMetricCard(
-                            label: 'Toc do',
+                            label: 'Tốc độ',
                             value: trackingState.vehicleSpeed,
                           ),
                         ),
@@ -291,18 +291,18 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                     SizedBox(height: 12.h),
                     Row(
-                      children: const [
+                      children: [
                         Expanded(
                           child: _VehicleMetricCard(
-                            label: 'Nhien lieu',
-                            value: '74%',
+                            label: 'Độ ẩm',
+                            value: trackingState.vehicleHumidity,
                           ),
                         ),
-                        SizedBox(width: 12),
+                        SizedBox(width: 12.w),
                         Expanded(
                           child: _VehicleMetricCard(
-                            label: 'Nhiet do',
-                            value: '32 C',
+                            label: 'Nhiệt độ',
+                            value: trackingState.vehicleTemperature,
                           ),
                         ),
                       ],
@@ -329,7 +329,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Vi tri xe',
+                                  'Vị trí xe',
                                   style: Theme.of(context).textTheme.bodySmall
                                       ?.copyWith(
                                         color: AppColors.textSecondary,
@@ -372,7 +372,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Vi tri cua ban',
+                                  'Vị trí của bạn',
                                   style: Theme.of(context).textTheme.bodySmall
                                       ?.copyWith(
                                         color: AppColors.textSecondary,
@@ -623,7 +623,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                       ],
                     ),
                     child: Text(
-                      'Ket noi ban do dang cham, dang thu tai lai tile',
+                      'Kết nối bản đồ đang chậm, đang thử tải lại tile',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: AppColors.textPrimary,
@@ -647,7 +647,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   children: [
                     _BottomMapButton(
                       icon: Icons.alt_route_rounded,
-                      label: 'Duong di',
+                      label: 'Đường đi',
                       accentColor: AppColors.primary,
                       onTap: () {
                         unawaited(_openDirectionsToVehicle(trackingState));
@@ -656,7 +656,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     SizedBox(width: 10.w),
                     _BottomMapButton(
                       icon: Icons.refresh_rounded,
-                      label: 'Tai lai',
+                      label: 'Tải lại',
                       accentColor: const Color(0xFF0F172A),
                       onTap: _reloadMapTiles,
                     ),
@@ -750,7 +750,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           SizedBox(width: 10.w),
                           Expanded(
                             child: Text(
-                              'Tim xe, tai xe hoac dia chi',
+                              'Tìm xe, tài xế hoặc địa chỉ',
                               style: Theme.of(context).textTheme.bodyMedium
                                   ?.copyWith(color: AppColors.textSecondary),
                             ),
@@ -1073,7 +1073,7 @@ class _VehicleMarker extends StatelessWidget {
             borderRadius: BorderRadius.circular(999.r),
           ),
           child: Text(
-            'Xe cua toi',
+            'Xe của tôi',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.w700,

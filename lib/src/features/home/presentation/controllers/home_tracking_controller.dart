@@ -78,8 +78,8 @@ class HomeTrackingController extends _$HomeTrackingController {
                 errorMessage.contains('permission_denied');
             state = state.copyWith(
               vehicleStatus: isPermissionDenied
-                  ? 'Bi chan doc du lieu xe (Firebase rules)'
-                  : 'Dang thu ket noi du lieu xe',
+                  ? 'Bị chặn đọc dữ liệu xe (Firebase rules)'
+                  : 'Đang thử kết nối dữ liệu xe',
             );
           },
         );
@@ -97,7 +97,7 @@ class HomeTrackingController extends _$HomeTrackingController {
       },
       onError: (error, stackTrace) {
         state = state.copyWith(
-          userAddress: 'Khong the theo doi vi tri realtime',
+          userAddress: 'Không thể theo dõi vị trí realtime',
         );
       },
     );
@@ -106,7 +106,7 @@ class HomeTrackingController extends _$HomeTrackingController {
   Future<void> _loadCurrentUserLocation({bool forceAddress = false}) async {
     final location = await _getCurrentUserLocationUseCase();
     if (location == null) {
-      state = state.copyWith(userAddress: 'Khong co quyen vi tri');
+      state = state.copyWith(userAddress: 'Không có quyền vị trí');
       return;
     }
 
@@ -131,13 +131,21 @@ class HomeTrackingController extends _$HomeTrackingController {
     }
 
     var displayStatus = _mapMotionState(snapshot.motionState);
-    if (displayStatus == 'Dang cap nhat') {
-      displayStatus = 'Da ket noi du lieu xe';
+    if (displayStatus == 'Đang cập nhật') {
+      displayStatus = 'Đã kết nối dữ liệu xe';
     }
 
     final speedText = snapshot.speedKmh != null
         ? '${snapshot.speedKmh!.toStringAsFixed(1)} km/h'
         : state.vehicleSpeed;
+
+    final tempText = snapshot.temperature != null
+        ? '${snapshot.temperature!.toStringAsFixed(1)} °C'
+        : state.vehicleTemperature;
+
+    final humText = snapshot.humidity != null
+        ? '${snapshot.humidity!.toStringAsFixed(1)} %'
+        : state.vehicleHumidity;
 
     state = state.copyWith(
       hasVehicleLocation: true,
@@ -145,28 +153,30 @@ class HomeTrackingController extends _$HomeTrackingController {
       routePoints: nextRoute,
       vehicleStatus: displayStatus,
       vehicleSpeed: speedText,
+      vehicleTemperature: tempText,
+      vehicleHumidity: humText,
       vehicleUpdatedAt: _formatUpdatedAt(snapshot.updatedAt),
     );
   }
 
   String _mapMotionState(String? stateValue) {
     final raw = stateValue?.trim();
-    if (raw == null || raw.isEmpty) return 'Dang cap nhat';
+    if (raw == null || raw.isEmpty) return 'Đang cập nhật';
 
     switch (raw.toLowerCase()) {
       case 'moving':
-        return 'Dang di chuyen';
+        return 'Đang di chuyển';
       case 'stopped':
-        return 'Dung xe';
+        return 'Dừng xe';
       case 'idle':
-        return 'Dang no may';
+        return 'Đang nổ máy';
       default:
         return raw;
     }
   }
 
   String _formatUpdatedAt(DateTime? updatedAt) {
-    if (updatedAt == null) return 'Dang cho du lieu';
+    if (updatedAt == null) return 'Đang chờ dữ liệu';
     return '${updatedAt.hour.toString().padLeft(2, '0')}:${updatedAt.minute.toString().padLeft(2, '0')}';
   }
 

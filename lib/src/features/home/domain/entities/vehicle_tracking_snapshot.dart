@@ -7,6 +7,8 @@ class VehicleTrackingSnapshot {
     this.speedKmh,
     this.motionState,
     this.updatedAt,
+    this.temperature,
+    this.humidity,
   });
 
   final String vehicleId;
@@ -14,4 +16,6 @@ class VehicleTrackingSnapshot {
   final double? speedKmh;
   final String? motionState;
   final DateTime? updatedAt;
+  final double? temperature;
+  final double? humidity;
 }

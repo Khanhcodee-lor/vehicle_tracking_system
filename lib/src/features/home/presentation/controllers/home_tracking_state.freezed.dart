@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$HomeTrackingState {
 
- LocationPoint get currentLocation; bool get hasUserLocation; bool get hasVehicleLocation; LocationPoint get vehicleLocation; List<LocationPoint> get routePoints; String get vehicleStatus; String get vehicleSpeed; String get vehicleUpdatedAt; String get vehicleAddress; String get userAddress;
+ LocationPoint get currentLocation; bool get hasUserLocation; bool get hasVehicleLocation; LocationPoint get vehicleLocation; List<LocationPoint> get routePoints; String get vehicleStatus; String get vehicleSpeed; String get vehicleUpdatedAt; String get vehicleAddress; String get userAddress; String get vehicleTemperature; String get vehicleHumidity;
 /// Create a copy of HomeTrackingState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $HomeTrackingStateCopyWith<HomeTrackingState> get copyWith => _$HomeTrackingStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeTrackingState&&(identical(other.currentLocation, currentLocation) || other.currentLocation == currentLocation)&&(identical(other.hasUserLocation, hasUserLocation) || other.hasUserLocation == hasUserLocation)&&(identical(other.hasVehicleLocation, hasVehicleLocation) || other.hasVehicleLocation == hasVehicleLocation)&&(identical(other.vehicleLocation, vehicleLocation) || other.vehicleLocation == vehicleLocation)&&const DeepCollectionEquality().equals(other.routePoints, routePoints)&&(identical(other.vehicleStatus, vehicleStatus) || other.vehicleStatus == vehicleStatus)&&(identical(other.vehicleSpeed, vehicleSpeed) || other.vehicleSpeed == vehicleSpeed)&&(identical(other.vehicleUpdatedAt, vehicleUpdatedAt) || other.vehicleUpdatedAt == vehicleUpdatedAt)&&(identical(other.vehicleAddress, vehicleAddress) || other.vehicleAddress == vehicleAddress)&&(identical(other.userAddress, userAddress) || other.userAddress == userAddress));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeTrackingState&&(identical(other.currentLocation, currentLocation) || other.currentLocation == currentLocation)&&(identical(other.hasUserLocation, hasUserLocation) || other.hasUserLocation == hasUserLocation)&&(identical(other.hasVehicleLocation, hasVehicleLocation) || other.hasVehicleLocation == hasVehicleLocation)&&(identical(other.vehicleLocation, vehicleLocation) || other.vehicleLocation == vehicleLocation)&&const DeepCollectionEquality().equals(other.routePoints, routePoints)&&(identical(other.vehicleStatus, vehicleStatus) || other.vehicleStatus == vehicleStatus)&&(identical(other.vehicleSpeed, vehicleSpeed) || other.vehicleSpeed == vehicleSpeed)&&(identical(other.vehicleUpdatedAt, vehicleUpdatedAt) || other.vehicleUpdatedAt == vehicleUpdatedAt)&&(identical(other.vehicleAddress, vehicleAddress) || other.vehicleAddress == vehicleAddress)&&(identical(other.userAddress, userAddress) || other.userAddress == userAddress)&&(identical(other.vehicleTemperature, vehicleTemperature) || other.vehicleTemperature == vehicleTemperature)&&(identical(other.vehicleHumidity, vehicleHumidity) || other.vehicleHumidity == vehicleHumidity));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,currentLocation,hasUserLocation,hasVehicleLocation,vehicleLocation,const DeepCollectionEquality().hash(routePoints),vehicleStatus,vehicleSpeed,vehicleUpdatedAt,vehicleAddress,userAddress);
+int get hashCode => Object.hash(runtimeType,currentLocation,hasUserLocation,hasVehicleLocation,vehicleLocation,const DeepCollectionEquality().hash(routePoints),vehicleStatus,vehicleSpeed,vehicleUpdatedAt,vehicleAddress,userAddress,vehicleTemperature,vehicleHumidity);
 
 @override
 String toString() {
-  return 'HomeTrackingState(currentLocation: $currentLocation, hasUserLocation: $hasUserLocation, hasVehicleLocation: $hasVehicleLocation, vehicleLocation: $vehicleLocation, routePoints: $routePoints, vehicleStatus: $vehicleStatus, vehicleSpeed: $vehicleSpeed, vehicleUpdatedAt: $vehicleUpdatedAt, vehicleAddress: $vehicleAddress, userAddress: $userAddress)';
+  return 'HomeTrackingState(currentLocation: $currentLocation, hasUserLocation: $hasUserLocation, hasVehicleLocation: $hasVehicleLocation, vehicleLocation: $vehicleLocation, routePoints: $routePoints, vehicleStatus: $vehicleStatus, vehicleSpeed: $vehicleSpeed, vehicleUpdatedAt: $vehicleUpdatedAt, vehicleAddress: $vehicleAddress, userAddress: $userAddress, vehicleTemperature: $vehicleTemperature, vehicleHumidity: $vehicleHumidity)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $HomeTrackingStateCopyWith<$Res>  {
   factory $HomeTrackingStateCopyWith(HomeTrackingState value, $Res Function(HomeTrackingState) _then) = _$HomeTrackingStateCopyWithImpl;
 @useResult
 $Res call({
- LocationPoint currentLocation, bool hasUserLocation, bool hasVehicleLocation, LocationPoint vehicleLocation, List<LocationPoint> routePoints, String vehicleStatus, String vehicleSpeed, String vehicleUpdatedAt, String vehicleAddress, String userAddress
+ LocationPoint currentLocation, bool hasUserLocation, bool hasVehicleLocation, LocationPoint vehicleLocation, List<LocationPoint> routePoints, String vehicleStatus, String vehicleSpeed, String vehicleUpdatedAt, String vehicleAddress, String userAddress, String vehicleTemperature, String vehicleHumidity
 });
 
 
@@ -62,7 +62,7 @@ class _$HomeTrackingStateCopyWithImpl<$Res>
 
 /// Create a copy of HomeTrackingState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? currentLocation = null,Object? hasUserLocation = null,Object? hasVehicleLocation = null,Object? vehicleLocation = null,Object? routePoints = null,Object? vehicleStatus = null,Object? vehicleSpeed = null,Object? vehicleUpdatedAt = null,Object? vehicleAddress = null,Object? userAddress = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? currentLocation = null,Object? hasUserLocation = null,Object? hasVehicleLocation = null,Object? vehicleLocation = null,Object? routePoints = null,Object? vehicleStatus = null,Object? vehicleSpeed = null,Object? vehicleUpdatedAt = null,Object? vehicleAddress = null,Object? userAddress = null,Object? vehicleTemperature = null,Object? vehicleHumidity = null,}) {
   return _then(_self.copyWith(
 currentLocation: null == currentLocation ? _self.currentLocation : currentLocation // ignore: cast_nullable_to_non_nullable
 as LocationPoint,hasUserLocation: null == hasUserLocation ? _self.hasUserLocation : hasUserLocation // ignore: cast_nullable_to_non_nullable
@@ -74,6 +74,8 @@ as String,vehicleSpeed: null == vehicleSpeed ? _self.vehicleSpeed : vehicleSpeed
 as String,vehicleUpdatedAt: null == vehicleUpdatedAt ? _self.vehicleUpdatedAt : vehicleUpdatedAt // ignore: cast_nullable_to_non_nullable
 as String,vehicleAddress: null == vehicleAddress ? _self.vehicleAddress : vehicleAddress // ignore: cast_nullable_to_non_nullable
 as String,userAddress: null == userAddress ? _self.userAddress : userAddress // ignore: cast_nullable_to_non_nullable
+as String,vehicleTemperature: null == vehicleTemperature ? _self.vehicleTemperature : vehicleTemperature // ignore: cast_nullable_to_non_nullable
+as String,vehicleHumidity: null == vehicleHumidity ? _self.vehicleHumidity : vehicleHumidity // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -159,10 +161,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LocationPoint currentLocation,  bool hasUserLocation,  bool hasVehicleLocation,  LocationPoint vehicleLocation,  List<LocationPoint> routePoints,  String vehicleStatus,  String vehicleSpeed,  String vehicleUpdatedAt,  String vehicleAddress,  String userAddress)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LocationPoint currentLocation,  bool hasUserLocation,  bool hasVehicleLocation,  LocationPoint vehicleLocation,  List<LocationPoint> routePoints,  String vehicleStatus,  String vehicleSpeed,  String vehicleUpdatedAt,  String vehicleAddress,  String userAddress,  String vehicleTemperature,  String vehicleHumidity)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HomeTrackingState() when $default != null:
-return $default(_that.currentLocation,_that.hasUserLocation,_that.hasVehicleLocation,_that.vehicleLocation,_that.routePoints,_that.vehicleStatus,_that.vehicleSpeed,_that.vehicleUpdatedAt,_that.vehicleAddress,_that.userAddress);case _:
+return $default(_that.currentLocation,_that.hasUserLocation,_that.hasVehicleLocation,_that.vehicleLocation,_that.routePoints,_that.vehicleStatus,_that.vehicleSpeed,_that.vehicleUpdatedAt,_that.vehicleAddress,_that.userAddress,_that.vehicleTemperature,_that.vehicleHumidity);case _:
   return orElse();
 
 }
@@ -180,10 +182,10 @@ return $default(_that.currentLocation,_that.hasUserLocation,_that.hasVehicleLoca
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LocationPoint currentLocation,  bool hasUserLocation,  bool hasVehicleLocation,  LocationPoint vehicleLocation,  List<LocationPoint> routePoints,  String vehicleStatus,  String vehicleSpeed,  String vehicleUpdatedAt,  String vehicleAddress,  String userAddress)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LocationPoint currentLocation,  bool hasUserLocation,  bool hasVehicleLocation,  LocationPoint vehicleLocation,  List<LocationPoint> routePoints,  String vehicleStatus,  String vehicleSpeed,  String vehicleUpdatedAt,  String vehicleAddress,  String userAddress,  String vehicleTemperature,  String vehicleHumidity)  $default,) {final _that = this;
 switch (_that) {
 case _HomeTrackingState():
-return $default(_that.currentLocation,_that.hasUserLocation,_that.hasVehicleLocation,_that.vehicleLocation,_that.routePoints,_that.vehicleStatus,_that.vehicleSpeed,_that.vehicleUpdatedAt,_that.vehicleAddress,_that.userAddress);case _:
+return $default(_that.currentLocation,_that.hasUserLocation,_that.hasVehicleLocation,_that.vehicleLocation,_that.routePoints,_that.vehicleStatus,_that.vehicleSpeed,_that.vehicleUpdatedAt,_that.vehicleAddress,_that.userAddress,_that.vehicleTemperature,_that.vehicleHumidity);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -200,10 +202,10 @@ return $default(_that.currentLocation,_that.hasUserLocation,_that.hasVehicleLoca
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LocationPoint currentLocation,  bool hasUserLocation,  bool hasVehicleLocation,  LocationPoint vehicleLocation,  List<LocationPoint> routePoints,  String vehicleStatus,  String vehicleSpeed,  String vehicleUpdatedAt,  String vehicleAddress,  String userAddress)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LocationPoint currentLocation,  bool hasUserLocation,  bool hasVehicleLocation,  LocationPoint vehicleLocation,  List<LocationPoint> routePoints,  String vehicleStatus,  String vehicleSpeed,  String vehicleUpdatedAt,  String vehicleAddress,  String userAddress,  String vehicleTemperature,  String vehicleHumidity)?  $default,) {final _that = this;
 switch (_that) {
 case _HomeTrackingState() when $default != null:
-return $default(_that.currentLocation,_that.hasUserLocation,_that.hasVehicleLocation,_that.vehicleLocation,_that.routePoints,_that.vehicleStatus,_that.vehicleSpeed,_that.vehicleUpdatedAt,_that.vehicleAddress,_that.userAddress);case _:
+return $default(_that.currentLocation,_that.hasUserLocation,_that.hasVehicleLocation,_that.vehicleLocation,_that.routePoints,_that.vehicleStatus,_that.vehicleSpeed,_that.vehicleUpdatedAt,_that.vehicleAddress,_that.userAddress,_that.vehicleTemperature,_that.vehicleHumidity);case _:
   return null;
 
 }
@@ -215,7 +217,7 @@ return $default(_that.currentLocation,_that.hasUserLocation,_that.hasVehicleLoca
 
 
 class _HomeTrackingState extends HomeTrackingState {
-  const _HomeTrackingState({this.currentLocation = const LocationPoint(latitude: 16.047079, longitude: 108.206230), this.hasUserLocation = false, this.hasVehicleLocation = false, this.vehicleLocation = const LocationPoint(latitude: 16.047079, longitude: 108.206230), final  List<LocationPoint> routePoints = const <LocationPoint>[], this.vehicleStatus = 'Dang cho du lieu', this.vehicleSpeed = '-- km/h', this.vehicleUpdatedAt = 'Dang cho du lieu', this.vehicleAddress = 'Dang cho du lieu vi tri xe...', this.userAddress = 'Dang lay dia chi cua ban...'}): _routePoints = routePoints,super._();
+  const _HomeTrackingState({this.currentLocation = const LocationPoint(latitude: 16.047079, longitude: 108.206230), this.hasUserLocation = false, this.hasVehicleLocation = false, this.vehicleLocation = const LocationPoint(latitude: 16.047079, longitude: 108.206230), final  List<LocationPoint> routePoints = const <LocationPoint>[], this.vehicleStatus = 'Đang chờ dữ liệu', this.vehicleSpeed = '-- km/h', this.vehicleUpdatedAt = 'Đang chờ dữ liệu', this.vehicleAddress = 'Đang chờ dữ liệu vị trí xe...', this.userAddress = 'Đang lấy địa chỉ của bạn...', this.vehicleTemperature = '-- °C', this.vehicleHumidity = '-- %'}): _routePoints = routePoints,super._();
   
 
 @override@JsonKey() final  LocationPoint currentLocation;
@@ -234,6 +236,8 @@ class _HomeTrackingState extends HomeTrackingState {
 @override@JsonKey() final  String vehicleUpdatedAt;
 @override@JsonKey() final  String vehicleAddress;
 @override@JsonKey() final  String userAddress;
+@override@JsonKey() final  String vehicleTemperature;
+@override@JsonKey() final  String vehicleHumidity;
 
 /// Create a copy of HomeTrackingState
 /// with the given fields replaced by the non-null parameter values.
@@ -245,16 +249,16 @@ _$HomeTrackingStateCopyWith<_HomeTrackingState> get copyWith => __$HomeTrackingS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeTrackingState&&(identical(other.currentLocation, currentLocation) || other.currentLocation == currentLocation)&&(identical(other.hasUserLocation, hasUserLocation) || other.hasUserLocation == hasUserLocation)&&(identical(other.hasVehicleLocation, hasVehicleLocation) || other.hasVehicleLocation == hasVehicleLocation)&&(identical(other.vehicleLocation, vehicleLocation) || other.vehicleLocation == vehicleLocation)&&const DeepCollectionEquality().equals(other._routePoints, _routePoints)&&(identical(other.vehicleStatus, vehicleStatus) || other.vehicleStatus == vehicleStatus)&&(identical(other.vehicleSpeed, vehicleSpeed) || other.vehicleSpeed == vehicleSpeed)&&(identical(other.vehicleUpdatedAt, vehicleUpdatedAt) || other.vehicleUpdatedAt == vehicleUpdatedAt)&&(identical(other.vehicleAddress, vehicleAddress) || other.vehicleAddress == vehicleAddress)&&(identical(other.userAddress, userAddress) || other.userAddress == userAddress));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeTrackingState&&(identical(other.currentLocation, currentLocation) || other.currentLocation == currentLocation)&&(identical(other.hasUserLocation, hasUserLocation) || other.hasUserLocation == hasUserLocation)&&(identical(other.hasVehicleLocation, hasVehicleLocation) || other.hasVehicleLocation == hasVehicleLocation)&&(identical(other.vehicleLocation, vehicleLocation) || other.vehicleLocation == vehicleLocation)&&const DeepCollectionEquality().equals(other._routePoints, _routePoints)&&(identical(other.vehicleStatus, vehicleStatus) || other.vehicleStatus == vehicleStatus)&&(identical(other.vehicleSpeed, vehicleSpeed) || other.vehicleSpeed == vehicleSpeed)&&(identical(other.vehicleUpdatedAt, vehicleUpdatedAt) || other.vehicleUpdatedAt == vehicleUpdatedAt)&&(identical(other.vehicleAddress, vehicleAddress) || other.vehicleAddress == vehicleAddress)&&(identical(other.userAddress, userAddress) || other.userAddress == userAddress)&&(identical(other.vehicleTemperature, vehicleTemperature) || other.vehicleTemperature == vehicleTemperature)&&(identical(other.vehicleHumidity, vehicleHumidity) || other.vehicleHumidity == vehicleHumidity));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,currentLocation,hasUserLocation,hasVehicleLocation,vehicleLocation,const DeepCollectionEquality().hash(_routePoints),vehicleStatus,vehicleSpeed,vehicleUpdatedAt,vehicleAddress,userAddress);
+int get hashCode => Object.hash(runtimeType,currentLocation,hasUserLocation,hasVehicleLocation,vehicleLocation,const DeepCollectionEquality().hash(_routePoints),vehicleStatus,vehicleSpeed,vehicleUpdatedAt,vehicleAddress,userAddress,vehicleTemperature,vehicleHumidity);
 
 @override
 String toString() {
-  return 'HomeTrackingState(currentLocation: $currentLocation, hasUserLocation: $hasUserLocation, hasVehicleLocation: $hasVehicleLocation, vehicleLocation: $vehicleLocation, routePoints: $routePoints, vehicleStatus: $vehicleStatus, vehicleSpeed: $vehicleSpeed, vehicleUpdatedAt: $vehicleUpdatedAt, vehicleAddress: $vehicleAddress, userAddress: $userAddress)';
+  return 'HomeTrackingState(currentLocation: $currentLocation, hasUserLocation: $hasUserLocation, hasVehicleLocation: $hasVehicleLocation, vehicleLocation: $vehicleLocation, routePoints: $routePoints, vehicleStatus: $vehicleStatus, vehicleSpeed: $vehicleSpeed, vehicleUpdatedAt: $vehicleUpdatedAt, vehicleAddress: $vehicleAddress, userAddress: $userAddress, vehicleTemperature: $vehicleTemperature, vehicleHumidity: $vehicleHumidity)';
 }
 
 
@@ -265,7 +269,7 @@ abstract mixin class _$HomeTrackingStateCopyWith<$Res> implements $HomeTrackingS
   factory _$HomeTrackingStateCopyWith(_HomeTrackingState value, $Res Function(_HomeTrackingState) _then) = __$HomeTrackingStateCopyWithImpl;
 @override @useResult
 $Res call({
- LocationPoint currentLocation, bool hasUserLocation, bool hasVehicleLocation, LocationPoint vehicleLocation, List<LocationPoint> routePoints, String vehicleStatus, String vehicleSpeed, String vehicleUpdatedAt, String vehicleAddress, String userAddress
+ LocationPoint currentLocation, bool hasUserLocation, bool hasVehicleLocation, LocationPoint vehicleLocation, List<LocationPoint> routePoints, String vehicleStatus, String vehicleSpeed, String vehicleUpdatedAt, String vehicleAddress, String userAddress, String vehicleTemperature, String vehicleHumidity
 });
 
 
@@ -282,7 +286,7 @@ class __$HomeTrackingStateCopyWithImpl<$Res>
 
 /// Create a copy of HomeTrackingState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? currentLocation = null,Object? hasUserLocation = null,Object? hasVehicleLocation = null,Object? vehicleLocation = null,Object? routePoints = null,Object? vehicleStatus = null,Object? vehicleSpeed = null,Object? vehicleUpdatedAt = null,Object? vehicleAddress = null,Object? userAddress = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? currentLocation = null,Object? hasUserLocation = null,Object? hasVehicleLocation = null,Object? vehicleLocation = null,Object? routePoints = null,Object? vehicleStatus = null,Object? vehicleSpeed = null,Object? vehicleUpdatedAt = null,Object? vehicleAddress = null,Object? userAddress = null,Object? vehicleTemperature = null,Object? vehicleHumidity = null,}) {
   return _then(_HomeTrackingState(
 currentLocation: null == currentLocation ? _self.currentLocation : currentLocation // ignore: cast_nullable_to_non_nullable
 as LocationPoint,hasUserLocation: null == hasUserLocation ? _self.hasUserLocation : hasUserLocation // ignore: cast_nullable_to_non_nullable
@@ -294,6 +298,8 @@ as String,vehicleSpeed: null == vehicleSpeed ? _self.vehicleSpeed : vehicleSpeed
 as String,vehicleUpdatedAt: null == vehicleUpdatedAt ? _self.vehicleUpdatedAt : vehicleUpdatedAt // ignore: cast_nullable_to_non_nullable
 as String,vehicleAddress: null == vehicleAddress ? _self.vehicleAddress : vehicleAddress // ignore: cast_nullable_to_non_nullable
 as String,userAddress: null == userAddress ? _self.userAddress : userAddress // ignore: cast_nullable_to_non_nullable
+as String,vehicleTemperature: null == vehicleTemperature ? _self.vehicleTemperature : vehicleTemperature // ignore: cast_nullable_to_non_nullable
+as String,vehicleHumidity: null == vehicleHumidity ? _self.vehicleHumidity : vehicleHumidity // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

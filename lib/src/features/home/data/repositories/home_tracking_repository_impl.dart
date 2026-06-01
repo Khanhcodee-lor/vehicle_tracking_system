@@ -268,12 +268,25 @@ class HomeTrackingRepositoryImpl implements HomeTrackingRepository {
         : null;
     final updatedAt = _parseUpdatedAt(payload, gps);
 
+    final dht11 = payload['dht11'];
+    double? temp;
+    double? hum;
+    if (dht11 is Map) {
+      temp = _toDouble(dht11['temperature'] ?? dht11['temp'] ?? dht11['temperature_c']);
+      hum = _toDouble(dht11['humidity'] ?? dht11['hum'] ?? dht11['humidity_percent']);
+    } else {
+      temp = _toDouble(payload['temperature'] ?? payload['temp'] ?? payload['temperature_c']);
+      hum = _toDouble(payload['humidity'] ?? payload['hum'] ?? payload['humidity_percent']);
+    }
+
     return VehicleTrackingSnapshot(
       vehicleId: payload['vehicle_id']?.toString() ?? targetVehicleId,
       location: LocationPoint(latitude: lat, longitude: lng),
       speedKmh: speed,
       motionState: motionState,
       updatedAt: updatedAt,
+      temperature: temp,
+      humidity: hum,
     );
   }
 

@@ -42,7 +42,7 @@ final class HomeTrackingControllerProvider
 }
 
 String _$homeTrackingControllerHash() =>
-    r'ff61da7aad32e6c3537985a7e0357d9a88f4b335';
+    r'b6104a204dceec882b16963878eee2c984db3d55';
 
 abstract class _$HomeTrackingController extends $Notifier<HomeTrackingState> {
   HomeTrackingState build();
